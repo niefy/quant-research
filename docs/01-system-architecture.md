@@ -20,25 +20,25 @@
 
 ```mermaid
 flowchart TB
-    subgraph L1["L1 展示层"]
+    subgraph L1 [L1 展示层]
         H5["H5 监控端"]
         CLI["CLI / Notebook"]
     end
 
-    subgraph L2["L2 接口层"]
+    subgraph L2 [L2 接口层]
         API["REST API"]
         EVT["SSE 事件网关"]
         AUTH["认证 / 限流 / 审计"]
     end
 
-    subgraph L3["L3 编排层"]
+    subgraph L3 [L3 编排层]
         WF["Workflow Orchestrator"]
         SCH["Scheduler"]
         GATE["Gate Engine"]
         REG["Trial Registry"]
     end
 
-    subgraph L4["L4 能力层"]
+    subgraph L4 [L4 能力层]
         AGENT["Agent Runtime"]
         VAL["Validation Engine"]
         BT["Backtest Engine"]
@@ -47,7 +47,7 @@ flowchart TB
         REP["Report Engine"]
     end
 
-    subgraph L5["L5 基础设施层"]
+    subgraph L5 [L5 基础设施层]
         PG[("PostgreSQL")]
         REDIS[("Redis")]
         OBJ[("Object Storage")]
@@ -64,7 +64,12 @@ flowchart TB
     WF --> SCH
     WF --> GATE
     WF --> REG
-    SCH --> AGENT & VAL & BT & FR & DATA & REP
+    SCH --> AGENT
+    SCH --> VAL
+    SCH --> BT
+    SCH --> FR
+    SCH --> DATA
+    SCH --> REP
     AGENT --> LLM
     AGENT --> SANDBOX
     VAL --> FR
@@ -119,7 +124,7 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    subgraph Host["单机 / 单节点"]
+    subgraph Host [单机 / 单节点]
         NG["nginx :443"]
         API["api :8000"]
         SCH["scheduler"]
@@ -142,12 +147,28 @@ flowchart LR
     API --> PG
     API --> MI
     SCH --> RD
-    RD --> W1 & W2 & W3 & W4 & W5 & W6
+    RD --> W1
+    RD --> W2
+    RD --> W3
+    RD --> W4
+    RD --> W5
+    RD --> W6
     W1 --> SANDBOX
-    W1 & W2 & W3 & W4 & W5 & W6 --> PG
-    W3 & W4 & W5 --> FS
+    W1 --> PG
+    W2 --> PG
+    W3 --> PG
+    W4 --> PG
+    W5 --> PG
+    W6 --> PG
+    W3 --> FS
+    W4 --> FS
+    W5 --> FS
+    W1 --> MI
+    W2 --> MI
+    W3 --> MI
+    W4 --> MI
+    W5 --> MI
     W6 --> MI
-    W1 & W2 & W3 & W4 & W5 & W6 --> MI
 ```
 
 **进程职责**
