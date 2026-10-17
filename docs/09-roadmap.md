@@ -39,17 +39,15 @@ flowchart LR
 - [x] 架构设计文档（本套 docs）
 - [ ] 确认第 9 节关键决策（市场/部署/LLM/用户）
 - [ ] 冻结三个契约：
-  - `FactorSpec v1`
-  - `ValidationProfile v1`
-  - 事件协议 v1
-- [ ] 仓库骨架：
-  - `backend/quant/`、`backend/app/`、`backend/agents/`、`backend/workers/`
-  - `webui/` 初始化
-  - `pyproject.toml`、ruff、mypy、pytest、pre-commit
-  - `deploy/docker-compose.yml` 空壳
-- [ ] CI：lint + typecheck + unit + build
-- [ ] ADR 目录与首批 ADR
-- [ ] `.env.example`、配置加载规范
+  - [x] `FactorSpec v1`（Pydantic 契约 + JSON Schema + 示例）
+  - [x] `ValidationProfile v1`（Pydantic 契约 + JSON Schema + 示例）
+  - [ ] 事件协议 v1（随 M3 API 冻结）
+- [x] 研究内核骨架：`backend/quant/`、`pyproject.toml`、ruff、mypy、pytest、pre-commit
+- [ ] `backend/app/`、`backend/agents/`、`backend/workers/`、`webui/` 初始化（M3/M4）
+- [x] `deploy/docker-compose.yml`（Postgres/Redis 开发依赖）
+- [x] CI：lint + typecheck + unit + schema 漂移检查
+- [x] ADR 目录与首批 ADR（`docs/adr/`）
+- [x] `.env.example`；配置加载规范随 API 实现落地
 
 ### 验收标准
 
@@ -69,16 +67,16 @@ flowchart LR
 
 ### 交付物
 
-- [ ] `MarketAdapter` 接口 + `BinancePerpAdapter`
+- [x] `MarketAdapter` 接口 + `BinancePerpAdapter`（首个实现，本地 Parquet）
 - [ ] 现有 downloader/aggregator 迁移或包装
-- [ ] 双时间轴字段（`event_time/available_at/ingested_at`）
+- [x] 双时间轴字段（`event_time/available_at/ingested_at`）
 - [ ] PIT universe（top N 成交额，按决策时点）
 - [ ] 数据快照生成 + manifest + 质量报告
 - [ ] Parquet/DuckDB 存储与分区
-- [ ] `FactorSpec` 解析器 + AST + 20+ 算子
-- [ ] `FactorRuntime`（Polars）与缓存
-- [ ] 标签构造（1d horizon，执行延迟）
-- [ ] CLI：`quant factor compute`, `quant snapshot create`
+- [x] `FactorSpec` 解析器 + AST + 20+ 算子
+- [x] `FactorRuntime`（Polars）与内容寻址缓存
+- [x] 标签构造（执行延迟 + horizon）
+- [x] CLI：`quant factor compute`（`quant snapshot create` 待实现）
 - [ ] 黄金数据集（固定小样本 + 期望输出）
 
 ### 验收标准

@@ -2,7 +2,7 @@
 
 > 版本：v0.1  
 > 日期：2026-10-17  
-> 状态：设计稿，仅文档，不包含实现  
+> 状态：设计已冻结；研究内核首个纵向切片已实现（M0–M1 进行中）  
 > 适用范围：因子/策略研究、自动验证、H5 任务监控
 
 ---
@@ -218,6 +218,7 @@ flowchart TB
 | [07-frontend-h5.md](07-frontend-h5.md) | 信息架构、页面规格、组件、图表、SSE 客户端、移动端体验 |
 | [08-security-reproducibility.md](08-security-reproducibility.md) | 威胁模型、沙箱、审计、OOS 金库、可复现清单、测试策略 |
 | [09-roadmap.md](09-roadmap.md) | 里程碑、交付物、验收标准、风险与开放问题 |
+| [adr/](adr/README.md) | 架构决策记录（内核选型、DSL、契约、面板、缓存） |
 
 ---
 

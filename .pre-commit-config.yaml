@@ -1,0 +1,25 @@
+# Install once with: pre-commit install
+# Hooks run from the repository root; the backend tooling lives in backend/.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff check
+        entry: ruff check --fix
+        language: system
+        types: [python]
+        files: ^backend/
+      - id: mypy
+        name: mypy
+        entry: bash -c "cd backend && mypy quant"
+        language: system
+        pass_filenames: false
+        files: ^backend/quant/

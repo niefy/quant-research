@@ -2,7 +2,7 @@
 
 > **从论文到可信因子：自动挖掘 → 统计验证 → 抗拟合审查 → 可复现报告 → H5 实时监控。**
 
-当前状态：**架构设计完成，平台代码尚未实现**。仓库中已有 Binance 数据下载、K 线聚合与 EMA 策略示例，将作为数据层和回测层的迁移基础。设计文档见 [`docs/`](docs/README.md)。  
+当前状态：**M0 设计冻结完成，M1 研究内核首个纵向切片已实现**——FactorSpec / ValidationProfile 契约与 JSON Schema、受限 DSL、Polars 因子运行时与内容寻址缓存、双时间轴 Panel、G1 Rank IC 门槛、CLI 与负对照测试。Agent、API、队列与 H5 尚未实现。设计文档见 [`docs/`](docs/README.md)，决策记录见 [`docs/adr/`](docs/adr/README.md)。  
 首期市场：**Binance USDT 永续**；后续扩展 A 股/美股。
 
 ---
@@ -291,12 +291,14 @@ flowchart TB
 
 ```text
 quant-research/
-├── docs/                    # 架构设计文档（当前重点）
+├── docs/                    # 架构设计文档 + ADR
+├── examples/                # FactorSpec / ValidationProfile 示例
 ├── backend/
-│   ├── app/                 # FastAPI、API、编排器
-│   ├── quant/               # 数据、因子、验证、回测内核
-│   ├── agents/              # Agent 角色、工具、提示词、契约
-│   ├── workers/             # Celery Worker
+│   ├── quant/               # ✅ 研究内核：契约、DSL、Panel、因子运行时、G1
+│   ├── tests/               # ✅ 单元 / 统计校准测试
+│   ├── app/                 # FastAPI、API、编排器（待开发）
+│   ├── agents/              # Agent 角色、工具、提示词、契约（待开发）
+│   ├── workers/             # Celery Worker（待开发）
 │   ├── downloader/          # 现有 Binance 数据下载（待迁移）
 │   ├── strategy/            # 现有策略示例（待迁移）
 │   └── config/              # 配置
@@ -348,7 +350,41 @@ flowchart LR
 
 ---
 
-## 11. 规划中的使用方式
+## 11. 使用方式
+
+### 11.1 当前可用：研究内核 CLI
+
+```bash
+# 安装（Python 3.13）
+cd backend
+python -m venv ../.venv && source ../.venv/bin/activate
+pip install -e ".[dev]"
+
+# 本地数据目录结构：<data-dir>/<SYMBOL>/<SYMBOL>-<frequency>.parquet
+# 例如 /home/me/binance_data/BTCUSDT/BTCUSDT-30m.parquet
+
+# 计算因子（参数可覆盖；结果写入 Parquet + 同名 JSON 元数据）
+python -m quant.cli factor compute \
+  --spec ../examples/factor_momentum.yaml \
+  --data-dir /path/to/binance_data \
+  --output /tmp/factor.parquet
+
+# 运行 G1（Rank IC / ICIR / 胜率 / Newey-West t / 子期胜率）
+python -m quant.cli validate \
+  --spec ../examples/factor_momentum.yaml \
+  --profile ../examples/profile_crypto_perp_30m_v1.yaml \
+  --data-dir /path/to/binance_data \
+  --gates G1 \
+  --output /tmp/g1_report.json
+
+# 导出/校验契约 JSON Schema
+python -m quant.cli schema export
+```
+
+示例动量因子在本地 30m 样本上 G1 **不通过**（20 bar 收益与未来收益负相关），
+这是门槛正常工作的表现：示例用于演示流水线，而不是保证某个因子有效。
+
+### 11.2 规划中的平台使用方式
 
 > 以下为设计目标，尚未实现。
 

@@ -1,0 +1,345 @@
+{
+  "$defs": {
+    "G1ICThresholds": {
+      "additionalProperties": false,
+      "properties": {
+        "rank_ic_mean_min": {
+          "default": 0.02,
+          "title": "Rank Ic Mean Min",
+          "type": "number"
+        },
+        "icir_min": {
+          "default": 0.4,
+          "title": "Icir Min",
+          "type": "number"
+        },
+        "ic_win_rate_min": {
+          "default": 0.52,
+          "title": "Ic Win Rate Min",
+          "type": "number"
+        },
+        "t_stat_min": {
+          "default": 2.0,
+          "title": "T Stat Min",
+          "type": "number"
+        },
+        "min_periods": {
+          "default": 365,
+          "minimum": 1,
+          "title": "Min Periods",
+          "type": "integer"
+        },
+        "subperiod_positive_ratio_min": {
+          "default": 0.6,
+          "title": "Subperiod Positive Ratio Min",
+          "type": "number"
+        }
+      },
+      "title": "G1ICThresholds",
+      "type": "object"
+    },
+    "G2QuantileThresholds": {
+      "additionalProperties": false,
+      "properties": {
+        "n_quantiles": {
+          "default": 5,
+          "minimum": 2,
+          "title": "N Quantiles",
+          "type": "integer"
+        },
+        "monotonicity_min": {
+          "default": 0.7,
+          "title": "Monotonicity Min",
+          "type": "number"
+        },
+        "long_short_t_stat_min": {
+          "default": 2.0,
+          "title": "Long Short T Stat Min",
+          "type": "number"
+        },
+        "turnover_max": {
+          "default": 1.0,
+          "title": "Turnover Max",
+          "type": "number"
+        }
+      },
+      "title": "G2QuantileThresholds",
+      "type": "object"
+    },
+    "G3RobustnessThresholds": {
+      "additionalProperties": false,
+      "properties": {
+        "plateau_coverage_min": {
+          "default": 0.6,
+          "title": "Plateau Coverage Min",
+          "type": "number"
+        },
+        "plateau_tolerance": {
+          "default": 0.2,
+          "title": "Plateau Tolerance",
+          "type": "number"
+        },
+        "regime_positive_min": {
+          "default": 2,
+          "minimum": 1,
+          "title": "Regime Positive Min",
+          "type": "integer"
+        },
+        "permutation_p_max": {
+          "default": 0.05,
+          "title": "Permutation P Max",
+          "type": "number"
+        },
+        "permutation_b": {
+          "default": 1000,
+          "minimum": 1,
+          "title": "Permutation B",
+          "type": "integer"
+        },
+        "bootstrap_b": {
+          "default": 2000,
+          "minimum": 1,
+          "title": "Bootstrap B",
+          "type": "integer"
+        },
+        "cost_multipliers": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Cost Multipliers",
+          "type": "array"
+        }
+      },
+      "title": "G3RobustnessThresholds",
+      "type": "object"
+    },
+    "G4RedundancyThresholds": {
+      "additionalProperties": false,
+      "properties": {
+        "max_abs_corr": {
+          "default": 0.5,
+          "title": "Max Abs Corr",
+          "type": "number"
+        },
+        "residual_rank_ic_min": {
+          "default": 0.01,
+          "title": "Residual Rank Ic Min",
+          "type": "number"
+        },
+        "residual_t_stat_min": {
+          "default": 2.0,
+          "title": "Residual T Stat Min",
+          "type": "number"
+        },
+        "duplicate_corr": {
+          "default": 0.8,
+          "title": "Duplicate Corr",
+          "type": "number"
+        }
+      },
+      "title": "G4RedundancyThresholds",
+      "type": "object"
+    },
+    "G5GroupThresholds": {
+      "additionalProperties": false,
+      "properties": {
+        "fdr_q": {
+          "default": 0.1,
+          "title": "Fdr Q",
+          "type": "number"
+        },
+        "pbo_max": {
+          "default": 0.3,
+          "title": "Pbo Max",
+          "type": "number"
+        },
+        "cscv_splits": {
+          "default": 10,
+          "minimum": 2,
+          "title": "Cscv Splits",
+          "type": "integer"
+        },
+        "dsr_p_max": {
+          "default": 0.05,
+          "title": "Dsr P Max",
+          "type": "number"
+        }
+      },
+      "title": "G5GroupThresholds",
+      "type": "object"
+    },
+    "G6StrategyThresholds": {
+      "additionalProperties": false,
+      "properties": {
+        "cpcv_groups": {
+          "default": 6,
+          "minimum": 2,
+          "title": "Cpcv Groups",
+          "type": "integer"
+        },
+        "cpcv_test_groups": {
+          "default": 2,
+          "minimum": 1,
+          "title": "Cpcv Test Groups",
+          "type": "integer"
+        },
+        "purge": {
+          "const": "label_horizon",
+          "default": "label_horizon",
+          "title": "Purge",
+          "type": "string"
+        },
+        "embargo_pct": {
+          "default": 0.01,
+          "title": "Embargo Pct",
+          "type": "number"
+        },
+        "oos_sharpe_min": {
+          "default": 0.5,
+          "title": "Oos Sharpe Min",
+          "type": "number"
+        },
+        "dsr_p_max": {
+          "default": 0.05,
+          "title": "Dsr P Max",
+          "type": "number"
+        },
+        "max_drawdown_p95": {
+          "default": 0.4,
+          "title": "Max Drawdown P95",
+          "type": "number"
+        },
+        "ruin_probability_max": {
+          "default": 0.05,
+          "title": "Ruin Probability Max",
+          "type": "number"
+        }
+      },
+      "title": "G6StrategyThresholds",
+      "type": "object"
+    },
+    "G7HoldoutThresholds": {
+      "additionalProperties": false,
+      "properties": {
+        "min_rank_ic": {
+          "default": 0.0,
+          "title": "Min Rank Ic",
+          "type": "number"
+        },
+        "min_sharpe": {
+          "default": 0.0,
+          "title": "Min Sharpe",
+          "type": "number"
+        },
+        "dsr_p_max": {
+          "default": 0.1,
+          "title": "Dsr P Max",
+          "type": "number"
+        },
+        "degradation_tolerance": {
+          "default": 0.5,
+          "title": "Degradation Tolerance",
+          "type": "number"
+        }
+      },
+      "title": "G7HoldoutThresholds",
+      "type": "object"
+    },
+    "ProfileMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "market": {
+          "minLength": 1,
+          "title": "Market",
+          "type": "string"
+        },
+        "frequency": {
+          "minLength": 1,
+          "title": "Frequency",
+          "type": "string"
+        },
+        "scope": {
+          "enum": [
+            "cross_sectional",
+            "time_series"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "market",
+        "frequency",
+        "scope"
+      ],
+      "title": "ProfileMetadata",
+      "type": "object"
+    },
+    "Thresholds": {
+      "additionalProperties": false,
+      "properties": {
+        "g1_ic": {
+          "$ref": "#/$defs/G1ICThresholds"
+        },
+        "g2_quantile": {
+          "$ref": "#/$defs/G2QuantileThresholds"
+        },
+        "g3_robustness": {
+          "$ref": "#/$defs/G3RobustnessThresholds"
+        },
+        "g4_redundancy": {
+          "$ref": "#/$defs/G4RedundancyThresholds"
+        },
+        "g5_group": {
+          "$ref": "#/$defs/G5GroupThresholds"
+        },
+        "g6_strategy": {
+          "$ref": "#/$defs/G6StrategyThresholds"
+        },
+        "g7_holdout": {
+          "$ref": "#/$defs/G7HoldoutThresholds"
+        }
+      },
+      "title": "Thresholds",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "quant/v1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "kind": {
+      "const": "ValidationProfile",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/ProfileMetadata"
+    },
+    "thresholds": {
+      "$ref": "#/$defs/Thresholds"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata"
+  ],
+  "title": "ValidationProfileDocument",
+  "type": "object"
+}

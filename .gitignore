@@ -20,6 +20,9 @@ agent-tools/
 .local_tools/
 outputs/
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+backend/data/
 *.swp
 *.swo
 *~

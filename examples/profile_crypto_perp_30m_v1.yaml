@@ -1,0 +1,17 @@
+apiVersion: quant/v1
+kind: ValidationProfile
+metadata:
+  id: crypto_perp_30m_v1
+  market: crypto_perp
+  frequency: 30m
+  scope: cross_sectional
+  version: 1
+
+thresholds:
+  g1_ic:
+    rank_ic_mean_min: 0.02
+    icir_min: 0.40
+    ic_win_rate_min: 0.52
+    t_stat_min: 2.0
+    min_periods: 2000
+    subperiod_positive_ratio_min: 0.60

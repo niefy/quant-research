@@ -1,0 +1,494 @@
+{
+  "$defs": {
+    "FactorMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/FactorStatus",
+          "default": "draft"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "minLength": 1,
+          "title": "Created By",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "created_at",
+        "created_by"
+      ],
+      "title": "FactorMetadata",
+      "type": "object"
+    },
+    "FactorSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "market": {
+          "minLength": 1,
+          "title": "Market",
+          "type": "string"
+        },
+        "scope": {
+          "enum": [
+            "cross_sectional",
+            "time_series"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "frequency": {
+          "minLength": 1,
+          "title": "Frequency",
+          "type": "string"
+        },
+        "horizon": {
+          "minLength": 1,
+          "title": "Horizon",
+          "type": "string"
+        },
+        "universe": {
+          "$ref": "#/$defs/UniverseSpec"
+        },
+        "inputs": {
+          "items": {
+            "$ref": "#/$defs/InputSpec"
+          },
+          "minItems": 1,
+          "title": "Inputs",
+          "type": "array"
+        },
+        "params": {
+          "additionalProperties": {
+            "$ref": "#/$defs/ParamSpec"
+          },
+          "title": "Params",
+          "type": "object"
+        },
+        "expression": {
+          "minLength": 1,
+          "title": "Expression",
+          "type": "string"
+        },
+        "preprocessing": {
+          "$ref": "#/$defs/PreprocessingSpec"
+        },
+        "direction": {
+          "default": "long_high",
+          "enum": [
+            "long_high",
+            "long_low"
+          ],
+          "title": "Direction",
+          "type": "string"
+        },
+        "economic_rationale": {
+          "minLength": 1,
+          "title": "Economic Rationale",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ProvenanceSpec"
+        }
+      },
+      "required": [
+        "market",
+        "scope",
+        "frequency",
+        "horizon",
+        "universe",
+        "inputs",
+        "expression",
+        "economic_rationale",
+        "provenance"
+      ],
+      "title": "FactorSpec",
+      "type": "object"
+    },
+    "FactorStatus": {
+      "enum": [
+        "draft",
+        "candidate",
+        "validated",
+        "promoted",
+        "rejected",
+        "quarantined"
+      ],
+      "title": "FactorStatus",
+      "type": "string"
+    },
+    "FillSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "default": "cross_section_median",
+          "enum": [
+            "cross_section_median",
+            "cross_section_mean",
+            "zero"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "max_missing_ratio": {
+          "default": 0.3,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Max Missing Ratio",
+          "type": "number"
+        }
+      },
+      "title": "FillSpec",
+      "type": "object"
+    },
+    "InputSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "fields": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Fields",
+          "type": "array"
+        },
+        "availability_lag": {
+          "default": "0s",
+          "title": "Availability Lag",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "source",
+        "fields"
+      ],
+      "title": "InputSpec",
+      "type": "object"
+    },
+    "NeutralizeSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "exposures": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Exposures",
+          "type": "array"
+        },
+        "method": {
+          "const": "ols",
+          "default": "ols",
+          "title": "Method",
+          "type": "string"
+        }
+      },
+      "required": [
+        "exposures"
+      ],
+      "title": "NeutralizeSpec",
+      "type": "object"
+    },
+    "ParamSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "int",
+            "float",
+            "bool",
+            "str"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "default": {
+          "title": "Default"
+        },
+        "grid": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Grid"
+        }
+      },
+      "required": [
+        "type",
+        "default"
+      ],
+      "title": "ParamSpec",
+      "type": "object"
+    },
+    "PreprocessingSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "order": {
+          "items": {
+            "enum": [
+              "winsorize",
+              "neutralize",
+              "standardize",
+              "fill"
+            ],
+            "type": "string"
+          },
+          "title": "Order",
+          "type": "array"
+        },
+        "winsorize": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WinsorizeSpec"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "neutralize": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NeutralizeSpec"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "standardize": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StandardizeSpec"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "fill": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FillSpec"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "PreprocessingSpec",
+      "type": "object"
+    },
+    "ProvenanceSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "hypothesis_id": {
+          "minLength": 1,
+          "title": "Hypothesis Id",
+          "type": "string"
+        },
+        "source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Source Ids",
+          "type": "array"
+        },
+        "quotes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Quotes",
+          "type": "array"
+        },
+        "generated_by": {
+          "minLength": 1,
+          "title": "Generated By",
+          "type": "string"
+        },
+        "review_status": {
+          "default": "pending",
+          "enum": [
+            "pending",
+            "approved",
+            "rejected"
+          ],
+          "title": "Review Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hypothesis_id",
+        "source_ids",
+        "generated_by"
+      ],
+      "title": "ProvenanceSpec",
+      "type": "object"
+    },
+    "StandardizeSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "default": "cross_section_zscore",
+          "enum": [
+            "cross_section_zscore",
+            "cross_section_rank"
+          ],
+          "title": "Method",
+          "type": "string"
+        }
+      },
+      "title": "StandardizeSpec",
+      "type": "object"
+    },
+    "UniverseSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "minLength": 1,
+          "title": "Type",
+          "type": "string"
+        },
+        "n": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N"
+        },
+        "as_of": {
+          "default": "rebalance",
+          "enum": [
+            "rebalance",
+            "decision"
+          ],
+          "title": "As Of",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "UniverseSpec",
+      "type": "object"
+    },
+    "WinsorizeSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "const": "quantile",
+          "default": "quantile",
+          "title": "Method",
+          "type": "string"
+        },
+        "limits": {
+          "default": [
+            0.01,
+            0.99
+          ],
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Limits",
+          "type": "array"
+        },
+        "scope": {
+          "default": "cross_section",
+          "enum": [
+            "cross_section",
+            "time_series"
+          ],
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "title": "WinsorizeSpec",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "quant/v1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "kind": {
+      "const": "Factor",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/FactorMetadata"
+    },
+    "spec": {
+      "$ref": "#/$defs/FactorSpec"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "title": "FactorDocument",
+  "type": "object"
+}

@@ -1,0 +1,53 @@
+apiVersion: quant/v1
+kind: Factor
+metadata:
+  id: fac_crypto_xs_momentum_20bar
+  name: crypto_xs_momentum_20bar
+  version: 1
+  status: candidate
+  created_at: 2026-10-17T10:00:00Z
+  created_by: human:architect
+
+spec:
+  market: crypto_perp
+  scope: cross_sectional
+  frequency: 30m
+  horizon: 30m
+  universe:
+    type: top_n_by_quote_volume
+    n: 20
+    as_of: rebalance
+  inputs:
+    - name: close
+      source: market.kline
+      fields: [close]
+      availability_lag: 0s
+  params:
+    window:
+      type: int
+      default: 20
+      grid: [10, 15, 20, 25, 30]
+  expression: |
+    cs_rank(ts_return(close, window), method="average")
+  preprocessing:
+    order: [winsorize, standardize, fill]
+    winsorize:
+      method: quantile
+      limits: [0.01, 0.99]
+      scope: cross_section
+    standardize:
+      method: cross_section_zscore
+    fill:
+      method: cross_section_median
+      max_missing_ratio: 0.3
+  direction: long_high
+  economic_rationale: >
+    过去 20 根 30 分钟 K 线的收益率截面排名用于捕捉短期动量/反转。加密永续市场
+    流动性集中，趋势跟随资金流可能在短周期内延续价格变化。
+  provenance:
+    hypothesis_id: hyp_demo_momentum
+    source_ids: [src_local_demo]
+    quotes:
+      - "Short-horizon momentum and reversal are documented in crypto markets."
+    generated_by: human:architect
+    review_status: approved
