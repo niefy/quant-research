@@ -60,26 +60,26 @@
 
 ```mermaid
 flowchart TB
-    subgraph Client["客户端"]
+    subgraph Client [客户端]
         H5["H5 Web<br/>Vue 3 + Vant"]
     end
 
-    subgraph Edge["接入层"]
+    subgraph Edge [接入层]
         NG["Nginx / TLS"]
     end
 
-    subgraph API["API 层"]
+    subgraph API [API 层]
         FA["FastAPI<br/>REST + SSE"]
         AUTH["Auth / Rate Limit"]
     end
 
-    subgraph Orchestration["编排层"]
+    subgraph Orchestration [编排层]
         ORCH["Workflow Orchestrator<br/>DAG 状态机"]
         SCH["Scheduler<br/>优先级 / 重试 / 超时"]
         Q[("Redis<br/>队列 + Pub/Sub")]
     end
 
-    subgraph Workers["执行层"]
+    subgraph Workers [执行层]
         WA["Agent Worker<br/>LLM / 工具调用"]
         WD["Data Worker<br/>下载 / 解析 / 聚合"]
         WF["Factor Worker<br/>因子计算 / 缓存"]
@@ -88,13 +88,13 @@ flowchart TB
         WR["Report Worker<br/>图表 / PDF / JSON"]
     end
 
-    subgraph AgentRuntime["Agent 运行时"]
+    subgraph AgentRuntime [Agent 运行时]
         LLM["LLM Gateway<br/>模型路由 / 预算 / 缓存"]
         SBX["Sandbox Runner<br/>无网络 / 限额 / 只读数据"]
         TOOLS["Tool Registry<br/>MCP 风格工具"]
     end
 
-    subgraph Storage["存储层"]
+    subgraph Storage [存储层]
         PG[("PostgreSQL<br/>元数据 / 任务 / 试验")]
         REDIS_EVT[("Redis Pub/Sub<br/>事件流")]
         MINIO[("MinIO / 本地<br/>产物 / 报告")]
@@ -102,7 +102,7 @@ flowchart TB
         DUCK["DuckDB / Polars<br/>查询与计算"]
     end
 
-    subgraph External["外部来源"]
+    subgraph External [外部来源]
         SRC["SSRN / arXiv / NBER<br/>Quantpedia / PWB / TradingView"]
         MKT["行情数据<br/>Binance / 其它市场"]
     end
@@ -110,15 +110,32 @@ flowchart TB
     H5 --> NG --> FA
     FA --> ORCH
     ORCH --> Q
-    Q --> WA & WD & WF & WV & WB & WR
-    WA --> LLM & TOOLS
+    Q --> WA
+    Q --> WD
+    Q --> WF
+    Q --> WV
+    Q --> WB
+    Q --> WR
+    WA --> LLM
+    WA --> TOOLS
     TOOLS --> SBX
-    WD --> SRC & MKT
-    WF & WV & WB --> DUCK
+    WD --> SRC
+    WD --> MKT
+    WF --> DUCK
+    WV --> DUCK
+    WB --> DUCK
     DUCK --> LAKE
-    FA & ORCH & WA & WF & WV & WB --> PG
+    FA --> PG
+    ORCH --> PG
+    WA --> PG
+    WF --> PG
+    WV --> PG
+    WB --> PG
     ORCH --> REDIS_EVT --> FA
-    WF & WV & WB & WR --> MINIO
+    WF --> MINIO
+    WV --> MINIO
+    WB --> MINIO
+    WR --> MINIO
     FA --> MINIO
 ```
 

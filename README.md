@@ -43,25 +43,25 @@
 
 ```mermaid
 flowchart LR
-    subgraph S["1. 来源发现"]
+    subgraph S [1. 来源发现]
         P["论文 / 预印本<br/>SSRN · arXiv · NBER"]
         W["策略库 / 网页<br/>Quantpedia · PWB · TradingView"]
         L["本地文件<br/>PDF / CSV / 笔记"]
     end
 
-    subgraph A["2. Agent 挖掘"]
+    subgraph A [2. Agent 挖掘]
         SC["Scout<br/>检索与去重"]
         EX["Extractor<br/>提取经济逻辑"]
         IM["Implementer<br/>选模板 / 写因子"]
         CR["Critic<br/>对抗审查"]
     end
 
-    subgraph D["3. 数据底座"]
+    subgraph D [3. 数据底座]
         SN["数据快照<br/>PIT / 双时间轴"]
         UN["PIT Universe<br/>无幸存者偏差"]
     end
 
-    subgraph V["4. 验证漏斗"]
+    subgraph V [4. 验证漏斗]
         G0["G0 数据与实现审计"]
         G1["G1 IC / Rank IC"]
         G2["G2 分层与单调性"]
@@ -72,15 +72,19 @@ flowchart LR
         G7["G7 一次性 OOS"]
     end
 
-    subgraph O["5. 输出"]
+    subgraph O [5. 输出]
         R["验证报告<br/>JSON / PDF"]
         H["H5 实时监控"]
         F["因子库 / 策略池"]
     end
 
-    P & W & L --> SC --> EX --> IM --> CR
+    P --> SC
+    W --> SC
+    L --> SC
+    SC --> EX --> IM --> CR
     CR --> G0
-    SN & UN --> G0
+    SN --> G0
+    UN --> G0
     G0 --> G1 --> G2 --> G3 --> G4 --> G5 --> G6 --> G7
     G7 --> R --> H
     G7 --> F
@@ -159,22 +163,22 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    subgraph Client["客户端"]
+    subgraph Client [客户端]
         H5["H5 监控端<br/>Vue 3 + Vant"]
         CLI["CLI / Notebook"]
     end
 
-    subgraph API["接口层"]
+    subgraph API [接口层]
         NG["Nginx / TLS"]
         FA["FastAPI<br/>REST + SSE"]
     end
 
-    subgraph Orchestration["编排层"]
+    subgraph Orchestration [编排层]
         ORCH["Workflow Orchestrator<br/>DAG 状态机 / 审批 / 重试"]
         Q[("Redis<br/>队列 + Pub/Sub")]
     end
 
-    subgraph Workers["执行层"]
+    subgraph Workers [执行层]
         WA["Agent Worker<br/>LLM / 工具"]
         WD["Data Worker<br/>下载 / 解析 / 聚合"]
         WF["Factor Worker<br/>因子计算 / 缓存"]
@@ -183,13 +187,13 @@ flowchart TB
         WR["Report Worker<br/>图表 / PDF"]
     end
 
-    subgraph AgentRuntime["Agent 运行时"]
+    subgraph AgentRuntime [Agent 运行时]
         LLM["LLM Gateway<br/>路由 / 预算 / 结构化输出"]
         SBX["Sandbox<br/>无网络 / 限额 / AST 白名单"]
         TOOLS["Tool Registry<br/>来源 / 数据 / 因子 / 验证"]
     end
 
-    subgraph Storage["存储层"]
+    subgraph Storage [存储层]
         PG[("PostgreSQL<br/>任务 / 试验 / 门槛 / 审计")]
         OBJ[("MinIO / 文件<br/>报告 / 图表 / 产物")]
         LAKE[("Parquet 数据湖<br/>raw / curated / holdout")]
@@ -200,13 +204,29 @@ flowchart TB
     CLI --> FA
     FA --> ORCH
     ORCH --> Q
-    Q --> WA & WD & WF & WV & WB & WR
-    WA --> LLM & TOOLS
+    Q --> WA
+    Q --> WD
+    Q --> WF
+    Q --> WV
+    Q --> WB
+    Q --> WR
+    WA --> LLM
+    WA --> TOOLS
     TOOLS --> SBX
     WD --> LAKE
-    WF & WV & WB --> DUCK --> LAKE
-    FA & ORCH & WA & WF & WV & WB --> PG
-    WR & WF & WV --> OBJ
+    WF --> DUCK
+    WV --> DUCK
+    WB --> DUCK
+    DUCK --> LAKE
+    FA --> PG
+    ORCH --> PG
+    WA --> PG
+    WF --> PG
+    WV --> PG
+    WB --> PG
+    WR --> OBJ
+    WF --> OBJ
+    WV --> OBJ
     FA --> OBJ
 ```
 
